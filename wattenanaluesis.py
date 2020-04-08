@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr  7 12:11:42 2020
@@ -15,6 +17,8 @@ from lxml import html
 import requests
 import re
 import time
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import csv
 
@@ -84,7 +88,7 @@ class Statemachine:
         
     def idle(self):
         
-        t=3
+        t=10
         while t>0:
             time.sleep(1)
             t -= 1
