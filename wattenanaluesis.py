@@ -45,9 +45,7 @@ class Statemachine:
         List=tree.xpath('/html/body/div[2]/div[1]/div[2]/div[1]/div[2]/text()')    # extract wanted data with xPath from tree    
         Datn=re.findall(r'\d+', List[0])        # extract Visitors- and Player- number from string
     
-       
-        #assembling vectors
-    
+
         #assembling vectors
         
         iData=Dataset(datetime.now(),int(Datn[0]),int(Datn[1]),str(List[0]))        #ith dataset       
