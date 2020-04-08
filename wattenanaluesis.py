@@ -2,7 +2,7 @@
 """
 Created on Tue Apr  7 12:11:42 2020
 
-@author: Dominik Gruber
+@author: Aehrnz Ärger
 """
 # scrapes user statistics from watten.org
 # to stop and save, enter "0" with keyboard
