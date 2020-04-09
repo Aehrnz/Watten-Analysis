@@ -72,14 +72,13 @@ class Statemachine:
     
         # plot developement
         
-        fig1 = plt.figure(1)
-        ax1 = fig1.gca()
-        ax1.plot(Timevec, visitorsvec, Timevec, playersvec)
+        visitorsHandle, = plt.plot(Timevec, visitorsvec, label='Visitors')
+        playersHandle, = plt.plot(Timevec, playersvec, label='Players')
+        plt.legend(handles=[visitorsHandle, playersHandle])
         plt.xlabel("Time")
-        plt.ylabel("Visitors- and Playernumbers on watten.org")
-        plt.show()
+        plt.ylabel("Visitor and player numbers on watten.org")
         plt.draw()
-        fig1.savefig('Plot.png')             # saving the plot  
+        fig1.savefig('/var/www/html/watten.png')             # saving the plot  
         
         
     def idle(self):
