@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr  7 12:11:42 2020
 
-@author: Aehrnz Ärger
+@author: Dominik Gruber
 """
 # scrapes user statistics from watten.org
 # to stop and save, enter "0" with keyboard
@@ -17,10 +15,9 @@ from lxml import html
 import requests
 import re
 import time
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import csv
+import numpy as np
 
 
 workingdir = "."
@@ -34,8 +31,7 @@ class Dataset:
         self.players = players
         self.readstr=readstr
         
-cData=[]  
-       
+cData=[]
 
 
 class Statemachine:
@@ -49,7 +45,9 @@ class Statemachine:
         List=tree.xpath('/html/body/div[2]/div[1]/div[2]/div[1]/div[2]/text()')    # extract wanted data with xPath from tree    
         Datn=re.findall(r'\d+', List[0])        # extract Visitors- and Player- number from string
     
-
+       
+        #assembling vectors
+    
         #assembling vectors
         
         iData=Dataset(datetime.now(),int(Datn[0]),int(Datn[1]),str(List[0]))        #ith dataset       
@@ -74,29 +72,61 @@ class Statemachine:
     
         # plot developement
         
-        visitorsHandle, = plt.plot(Timevec, visitorsvec, label='Visitors')
-        playersHandle, = plt.plot(Timevec, playersvec, label='Players')
-        plt.legend(handles=[visitorsHandle, playersHandle])
+        fig1 = plt.figure(1)
+        ax1 = fig1.gca()
+        ax1.plot(Timevec, visitorsvec, Timevec, playersvec)
         plt.xlabel("Time")
-        plt.ylabel("Visitor and player numbers on watten.org")
+        plt.ylabel("Visitors- and Playernumbers on watten.org")
+        plt.show()
         plt.draw()
-        fig1.savefig('/var/www/html/watten.png')             # saving the plot  
+        fig1.savefig('Plot.png')             # saving the plot  
         
         
     def idle(self):
         
-        t=10
+        t=3
         while t>0:
             time.sleep(1)
             t -= 1
-
-  
+            
+    def analuesis(self):
+        
+        visitorsvec = [z.visitors for z in cData] 
+        playersvec = [z.players for z in cData]        
+        minvisitors = np.amin(visitorsvec)
+        minplayers = np.amin(playersvec)
+            
+            
+        with open('Output.txt', 'w') as f:
+            f.write(str( minvisitors  ))
+            f.write("\t" )
+            f.write(str( minplayers ))
+            f.close()
+            
 def main():
     
     SM=Statemachine()      #Statemachine SM
+    global checker  
+    checker=0   
+    
     while 1:
         SM.gather()
         SM.idle()
+        
+        now=datetime.now()
+        
+        
+        if now.hour==7 and now.minute==30 and checker==0:  #checker checks if the analysis has been run already
+            
+            SM.analuesis()
+                  
+            checker=1
+            
+        elif  now.hour==8 and checker!=0:
+            
+            checker=0
+            
+    
             
 if __name__== "__main__" :
     main()        
